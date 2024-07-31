@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 
 function App() {
+  const [jokes, setJokes] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/jokes') // Correct API endpoint
+      .then(response => {
+        setJokes(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []); // Add an empty dependency array to prevent infinite requests
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>Hello World</h1>
+      <p>JOKES: {jokes.length}</p>
+      {jokes.map((joke, index) => (
+        <div key={joke.id}>  
+          <h3>{joke.title}</h3>
+          <p>{joke.name}</p> 
+          <p>{joke.price}</p>
+        </div>
+      ))}
+    </>
   );
 }
 
